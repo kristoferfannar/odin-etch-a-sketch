@@ -1,11 +1,21 @@
-function start() {    
-    dimension = +window.prompt("Enter a number for the Grid size");
+function changeDimension() {
+    const input = document.querySelector("input");
+    let dimensionText = +input.value;
+    console.log(input.value);
     
-    while (isNaN(dimension)) {
-        dimension = +window.prompt("Please enter a valid number");
+    if (isNaN(dimensionText) || dimensionText < 1 || dimensionText > 100) {
+        alert("Please enter a number between 1 and 100");
+    } else {
+        dimension = +dimensionText;
+        input.value = "";
+        removeGrid();
+        createGrid();
     }
+}
 
-    createGrid();
+function removeGrid() {
+    const frame = document.querySelector(".frame");
+    frame.innerHTML = "";
 }
 
 function createGrid() {
@@ -23,7 +33,12 @@ function createRows() {
 
         frame.appendChild(row);
     }
+    makeBlocksClickable();
+}
 
+function makeBlocksClickable() {
+    const blocks = document.querySelectorAll(".item");
+    blocks.forEach(block => block.addEventListener('mouseover', () => {click(block)}) );
 }
 
 function fillRow(row) {
@@ -35,5 +50,23 @@ function fillRow(row) {
     }
 }
 
-var dimension;
-start();
+function click(block) {
+    block.classList.toggle("clicked");
+}
+
+
+function clearGrid() {
+    let blocks = document.querySelectorAll(".item");
+    blocks.forEach(block => block.classList.remove("clicked"));
+}
+
+
+
+var dimension = 16;
+createGrid();
+
+const clear = document.querySelector(".clear");
+clear.addEventListener('click', () => {clearGrid(clear)});
+
+const enter = document.querySelector(".submit");
+enter.addEventListener('click', () => {changeDimension()});
